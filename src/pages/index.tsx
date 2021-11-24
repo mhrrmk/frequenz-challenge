@@ -59,14 +59,16 @@ const useOrgs = () => {
                 url: "users",
                 params: { q: `${org} type:org` },
             }),
-        { enabled: org !== "", keepPreviousData: true },
+        {
+            enabled: org !== "",
+            keepPreviousData: true,
+            // refetchOnWindowFocus: false,
+        },
     );
 };
 
 const OrgsInput = () => {
     const setOrg = useContextSelector(context, (v) => v.setOrg);
-
-    useOrgs();
 
     const onOrgsChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
         console.log({ org: e.target.value });
