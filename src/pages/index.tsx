@@ -8,6 +8,9 @@ const BASE_API_URL = "https://api.github.com/search/";
 
 const githubSearchApi = axios.create({
     baseURL: BASE_API_URL,
+    headers: {
+        Accept: "application/vnd.github.v3+json",
+    },
 });
 
 const Home: React.FC = () => {
@@ -15,17 +18,34 @@ const Home: React.FC = () => {
 
     const [org, setOrg] = useState("");
 
-    const { data } = useQuery(
+    const { data, isLoading, isFetching } = useOrgs({ org });
+
+    console.log({ data: data?.data, isLoading, isFetching });
+
+    return (
+        <Row style={{ margin: 16 }} gutter={16}>
+            <Col span={24}>
+                <Form form={form} /* wrapperCol={{ span: 8 }} */>
+                    <OrgsInput org={org} setOrg={setOrg} />
+                </Form>
+            </Col>
+        </Row>
+    );
+};
+
+const useOrgs = ({ org }) =>
+    useQuery(
         ["orgs", { org }],
         () =>
             githubSearchApi({
                 url: "users",
                 params: { q: `${org} type:org` },
             }),
-        { enabled: org !== "" },
+        { enabled: org !== "", keepPreviousData: true },
     );
 
-    console.log({ data });
+const OrgsInput = ({ org, setOrg }) => {
+    useOrgs({ org });
 
     const onOrgsChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
         console.log({ org: e.target.value });
@@ -36,17 +56,10 @@ const Home: React.FC = () => {
         () => debounce(onOrgsChange, 500),
         [],
     );
-
     return (
-        <Row style={{ margin: 16 }} gutter={16}>
-            <Col span={24}>
-                <Form form={form} /* wrapperCol={{ span: 8 }} */>
-                    <Form.Item name="orgs">
-                        <Input onChange={debouncedOnOrgsChange} />
-                    </Form.Item>
-                </Form>
-            </Col>
-        </Row>
+        <Form.Item name="orgs">
+            <Input onChange={debouncedOnOrgsChange} />
+        </Form.Item>
     );
 };
 
