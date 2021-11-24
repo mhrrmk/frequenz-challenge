@@ -5,5 +5,5 @@ import { ButtonProps } from "antd/lib/button";
 export type IButton = ButtonProps;
 
 export const Button: React.FC<IButton> = ({ ...rest }) => {
-  return <BaseButton {...rest} data-testid="btn" />;
+    return <BaseButton {...rest} data-testid="btn" />;
 };

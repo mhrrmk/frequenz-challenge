@@ -1,18 +1,27 @@
 import React from "react";
-
-import { Header, Main, Cards, Footer } from "components";
+import { Row, Col, Input, Form, Card } from "antd";
 
 const Home: React.FC = () => {
-  return (
-    <div
-      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
-    >
-      <Header />
-      <Main />
-      <Cards />
-      <Footer />
-    </div>
-  );
+    return (
+        <Card>
+            <Row gutter={16}>
+                <Col span={24}>
+                    <Form wrapperCol={{ span: 8 }}>
+                        <Form.Item>
+                            <Input />
+                        </Form.Item>
+                    </Form>
+                </Col>
+                <Col>
+                    <Form>
+                        <Form.Item>
+                            <Input />
+                        </Form.Item>
+                    </Form>
+                </Col>
+            </Row>
+        </Card>
+    );
 };
 
 export default Home;
