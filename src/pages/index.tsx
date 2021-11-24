@@ -3,6 +3,9 @@ import { Row, Col, Input, Form } from "antd";
 import debounce from "lodash.debounce";
 import { useQuery } from "react-query";
 import axios from "axios";
+import { createContext, useContextSelector } from "use-context-selector";
+
+const context = createContext(null);
 
 const BASE_API_URL = "https://api.github.com/search/";
 
@@ -16,9 +19,7 @@ const githubSearchApi = axios.create({
 const Home: React.FC = () => {
     const [form] = Form.useForm();
 
-    const [org, setOrg] = useState("");
-
-    const { data, isLoading, isFetching } = useOrgs({ org });
+    const { data, isLoading, isFetching } = useOrgs();
 
     console.log({ data: data?.data, isLoading, isFetching });
 
@@ -26,15 +27,32 @@ const Home: React.FC = () => {
         <Row style={{ margin: 16 }} gutter={16}>
             <Col span={24}>
                 <Form form={form} /* wrapperCol={{ span: 8 }} */>
-                    <OrgsInput org={org} setOrg={setOrg} />
+                    <OrgsInput />
                 </Form>
             </Col>
         </Row>
     );
 };
 
-const useOrgs = ({ org }) =>
-    useQuery(
+const Wrapper = () => {
+    return (
+        <StateProvider>
+            <Home />
+        </StateProvider>
+    );
+};
+
+const StateProvider: React.FC = ({ children }) => {
+    const [org, setOrg] = useState("");
+    return (
+        <context.Provider value={{ org, setOrg }}>{children}</context.Provider>
+    );
+};
+
+const useOrgs = () => {
+    const org = useContextSelector(context, (v) => v.org);
+
+    return useQuery(
         ["orgs", { org }],
         () =>
             githubSearchApi({
@@ -43,9 +61,12 @@ const useOrgs = ({ org }) =>
             }),
         { enabled: org !== "", keepPreviousData: true },
     );
+};
 
-const OrgsInput = ({ org, setOrg }) => {
-    useOrgs({ org });
+const OrgsInput = () => {
+    const setOrg = useContextSelector(context, (v) => v.setOrg);
+
+    useOrgs();
 
     const onOrgsChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
         console.log({ org: e.target.value });
@@ -63,4 +84,4 @@ const OrgsInput = ({ org, setOrg }) => {
     );
 };
 
-export default Home;
+export default Wrapper;
