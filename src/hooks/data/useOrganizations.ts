@@ -2,14 +2,19 @@ import { useQuery } from "react-query";
 
 import { useStateContextSelector } from "contextSelectors";
 import { githubSearchApi } from "api";
+import { AxiosResponse } from "axios";
+
+type OrganizationResponseType = {
+    items: Array<{ login: string }>;
+};
 
 export const useOrganizations = () => {
     const organization = useStateContextSelector((v) => v.organization);
 
-    return useQuery(
+    return useQuery<AxiosResponse<OrganizationResponseType>>(
         ["organizations", { organization }],
-        async () =>
-            await githubSearchApi({
+        () =>
+            githubSearchApi({
                 url: "users",
                 params: { q: `${organization} type:org` },
             }),
