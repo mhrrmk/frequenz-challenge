@@ -1,23 +1,12 @@
-import React, { useMemo } from "react";
-import { Row, Col, Input, Form } from "antd";
-import debounce from "lodash.debounce";
-import { useQuery } from "react-query";
-import axios from "axios";
-import { useStateContextSelector } from "contextSelectors";
+import { Row, Col, Form } from "antd";
 
-const BASE_API_URL = "https://api.github.com/search/";
-
-const githubSearchApi = axios.create({
-    baseURL: BASE_API_URL,
-    headers: {
-        Accept: "application/vnd.github.v3+json",
-    },
-});
+import { OrganizationInput } from "components";
+import { useOrganizations } from "hooks";
 
 const Home: React.FC = () => {
     const [form] = Form.useForm();
 
-    const { data, isLoading, isFetching } = useOrgs();
+    const { data, isLoading, isFetching } = useOrganizations();
 
     console.log({ data: data?.data, isLoading, isFetching });
 
@@ -25,47 +14,12 @@ const Home: React.FC = () => {
         <Row style={{ margin: 16 }} gutter={16}>
             <Col span={24}>
                 <Form form={form} /* wrapperCol={{ span: 8 }} */>
-                    <OrgsInput />
+                    <Form.Item name="orgs">
+                        <OrganizationInput />
+                    </Form.Item>
                 </Form>
             </Col>
         </Row>
-    );
-};
-
-const useOrgs = () => {
-    const org = useStateContextSelector((v) => v.org);
-
-    return useQuery(
-        ["orgs", { org }],
-        () =>
-            githubSearchApi({
-                url: "users",
-                params: { q: `${org} type:org` },
-            }),
-        {
-            enabled: org !== "",
-            keepPreviousData: true,
-            // refetchOnWindowFocus: false,
-        },
-    );
-};
-
-const OrgsInput = () => {
-    const setOrg = useStateContextSelector((v) => v.setOrg);
-
-    const onOrgsChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-        console.log({ org: e.target.value });
-        setOrg(e.target.value);
-    };
-
-    const debouncedOnOrgsChange = useMemo(
-        () => debounce(onOrgsChange, 500),
-        [],
-    );
-    return (
-        <Form.Item name="orgs">
-            <Input onChange={debouncedOnOrgsChange} />
-        </Form.Item>
     );
 };
 

@@ -4,4 +4,4 @@ import { stateContext } from "providers";
 
 export const useStateContextSelector = <Selected>(
     selector: (value: State) => Selected,
-) => useContextSelector<State, Selected>(stateContext, selector);
+): Selected => useContextSelector<State, Selected>(stateContext, selector);

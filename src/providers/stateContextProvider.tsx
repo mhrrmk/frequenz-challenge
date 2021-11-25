@@ -2,16 +2,16 @@ import { useState } from "react";
 import { createContext } from "use-context-selector";
 
 export type State = {
-    org: string;
-    setOrg: React.Dispatch<React.SetStateAction<string>>;
+    organization: string;
+    setOrganization: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const stateContext = createContext<State>(null);
 
 export const StateProvider: React.FC = ({ children }) => {
-    const [org, setOrg] = useState("");
+    const [organization, setOrganization] = useState("");
     return (
-        <stateContext.Provider value={{ org, setOrg }}>
+        <stateContext.Provider value={{ organization, setOrganization }}>
             {children}
         </stateContext.Provider>
     );
