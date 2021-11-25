@@ -1,11 +1,9 @@
-import React, { useState, useMemo } from "react";
+import React, { useMemo } from "react";
 import { Row, Col, Input, Form } from "antd";
 import debounce from "lodash.debounce";
 import { useQuery } from "react-query";
 import axios from "axios";
-import { createContext, useContextSelector } from "use-context-selector";
-
-const context = createContext(null);
+import { useStateContextSelector } from "contextSelectors";
 
 const BASE_API_URL = "https://api.github.com/search/";
 
@@ -34,23 +32,8 @@ const Home: React.FC = () => {
     );
 };
 
-const Wrapper = () => {
-    return (
-        <StateProvider>
-            <Home />
-        </StateProvider>
-    );
-};
-
-const StateProvider: React.FC = ({ children }) => {
-    const [org, setOrg] = useState("");
-    return (
-        <context.Provider value={{ org, setOrg }}>{children}</context.Provider>
-    );
-};
-
 const useOrgs = () => {
-    const org = useContextSelector(context, (v) => v.org);
+    const org = useStateContextSelector((v) => v.org);
 
     return useQuery(
         ["orgs", { org }],
@@ -68,7 +51,7 @@ const useOrgs = () => {
 };
 
 const OrgsInput = () => {
-    const setOrg = useContextSelector(context, (v) => v.setOrg);
+    const setOrg = useStateContextSelector((v) => v.setOrg);
 
     const onOrgsChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
         console.log({ org: e.target.value });
@@ -86,4 +69,4 @@ const OrgsInput = () => {
     );
 };
 
-export default Wrapper;
+export default Home;
