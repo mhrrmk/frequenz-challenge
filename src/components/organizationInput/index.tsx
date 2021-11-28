@@ -18,5 +18,12 @@ export const OrganizationInput: React.FC<AutoCompleteProps> = (props) => {
         value: i.login,
     }));
 
-    return <AutoComplete {...props} options={options} onChange={onChange} />;
+    return (
+        <AutoComplete
+            {...props}
+            options={options}
+            onChange={onChange}
+            placeholder="Select Organisation"
+        />
+    );
 };

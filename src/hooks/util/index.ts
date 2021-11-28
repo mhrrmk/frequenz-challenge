@@ -1,1 +1,1 @@
-export * from "./useDebouncedEventHandler";
+export * from "./useDebounced";
