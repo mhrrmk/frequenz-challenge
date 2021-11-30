@@ -7,7 +7,7 @@ export const OrganizationInput: React.FC<AutoCompleteProps> = (props) => {
     const setOrganization = useStateContextSelector((v) => v.setOrganization);
 
     const onChange = useDebounced((value) => {
-        console.log({ org: value });
+        // console.log({ org: value });
         setOrganization(value);
     });
 
