@@ -2,6 +2,7 @@ import { useQuery } from "react-query";
 
 import { useStateContextSelector } from "contextSelectors";
 import { githubSearchApi } from "api";
+import { useOrganizations } from "hooks";
 
 type RepositoryResponseType = {
     items: Array<{
@@ -20,10 +21,12 @@ export const useRepositories = () => {
     const organization = useStateContextSelector((v) => v.organization);
     const repository = useStateContextSelector((v) => v.repository);
 
+    const { isOrganizationValid } = useOrganizations();
+
     return useQuery<ResponseType<RepositoryResponseType>>(
         ["repositories", { organization, repository }],
         () => {
-            if (repository === "") {
+            if (repository === "" || !isOrganizationValid) {
                 return {
                     data: {
                         items: [],
