@@ -15,7 +15,7 @@ type ResponseType<Data> = {
 export const useOrganizations = () => {
     const organization = useStateContextSelector((v) => v.organization);
 
-    return useQuery<ResponseType<OrganizationResponseType>>(
+    const queryResult = useQuery<ResponseType<OrganizationResponseType>>(
         ["organizations", { organization }],
         () => {
             if (organization === "") {
@@ -36,4 +36,16 @@ export const useOrganizations = () => {
             // refetchOnWindowFocus: false,
         },
     );
+
+    const organizationSearchResults = queryResult.data?.data.items.map(
+        (i) => i.login,
+    );
+
+    const isOrganizationValid =
+        organizationSearchResults?.includes(organization);
+
+    return {
+        ...queryResult,
+        isOrganizationValid,
+    };
 };
