@@ -1,7 +1,7 @@
 import { Row, Col, Form, Table, Input, InputProps } from "antd";
 
 import { OrganizationInput } from "components";
-import { useRepositories, useDebounced } from "hooks";
+import { useRepositories, useDebounced, useOrganizations } from "hooks";
 
 import { useStateContextSelector } from "contextSelectors";
 
@@ -10,7 +10,7 @@ const Home: React.FC = () => {
 
     const { data, isLoading, isFetching } = useRepositories();
 
-    console.log({ data: data?.data, isLoading, isFetching });
+    // console.log({ data: data?.data, isLoading, isFetching });
 
     return (
         <Row style={{ margin: 16 }} gutter={16}>
@@ -83,14 +83,21 @@ const Home: React.FC = () => {
 const RepositoryInput: React.FC<InputProps> = (props) => {
     const setRepository = useStateContextSelector((v) => v.setRepository);
 
+    const { isOrganizationValid } = useOrganizations();
+
     const onChange = useDebounced((e) => {
         const repository = e.target.value;
-        console.log({ repository });
+        // console.log({ repository });
         setRepository(repository);
     });
 
     return (
-        <Input {...props} onChange={onChange} placeholder="Type to filter" />
+        <Input
+            {...props}
+            onChange={onChange}
+            placeholder="Type to filter"
+            disabled={!isOrganizationValid}
+        />
     );
 };
 
