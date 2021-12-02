@@ -23,10 +23,12 @@ export const useRepositories = () => {
 
     const { isOrganizationValid } = useOrganizations();
 
+    console.log({ organization, repository, isOrganizationValid });
+
     return useQuery<ResponseType<RepositoryResponseType>>(
-        ["repositories", { organization, repository }],
+        ["repositories", { organization, repository, isOrganizationValid }],
         () => {
-            if (repository === "" || !isOrganizationValid) {
+            if (/* repository === "" ||  */ !isOrganizationValid) {
                 return {
                     data: {
                         items: [],
@@ -42,6 +44,7 @@ export const useRepositories = () => {
         {
             keepPreviousData: true,
             // refetchOnWindowFocus: false,
+            // enabled: isOrganizationValid,
         },
     );
 };

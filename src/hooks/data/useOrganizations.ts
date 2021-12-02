@@ -37,9 +37,8 @@ export const useOrganizations = () => {
         },
     );
 
-    const organizationSearchResults = queryResult.data?.data.items.map(
-        (i) => i.login,
-    );
+    const organizationSearchResults =
+        queryResult.data?.data.items.map((i) => i.login) ?? [];
 
     const isOrganizationValid =
         organizationSearchResults?.includes(organization);
