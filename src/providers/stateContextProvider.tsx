@@ -10,6 +10,11 @@ export type State = {
     // setOrganizationSearch: ReactSetStateType<State["organizationSearch"]>;
     repository: string;
     setRepository: ReactSetStateType<State["repository"]>;
+    minIssues: number;
+    setMinIssues: ReactSetStateType<State["minIssues"]>;
+    maxIssues: number;
+    setMaxIssues: ReactSetStateType<State["maxIssues"]>;
+    isIssueNumbersValid: boolean;
 };
 
 export const stateContext = createContext<State>(null);
@@ -18,6 +23,11 @@ export const StateProvider: React.FC = ({ children }) => {
     const [organization, setOrganization] = useState("");
     // const [organizationSearch, setOrganizationSearch] = useState("");
     const [repository, setRepository] = useState("");
+    const [minIssues, setMinIssues] = useState<number>();
+    const [maxIssues, setMaxIssues] = useState<number>();
+
+    const isIssueNumbersValid =
+        minIssues && maxIssues ? minIssues < maxIssues : true;
 
     return (
         <stateContext.Provider
@@ -28,6 +38,11 @@ export const StateProvider: React.FC = ({ children }) => {
                 // setOrganizationSearch,
                 repository,
                 setRepository,
+                minIssues,
+                setMinIssues,
+                maxIssues,
+                setMaxIssues,
+                isIssueNumbersValid,
             }}
         >
             {children}

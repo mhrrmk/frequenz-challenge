@@ -1,4 +1,13 @@
-import { Row, Col, Form, Table, Input, InputProps } from "antd";
+import {
+    Row,
+    Col,
+    Form,
+    Table,
+    Input,
+    InputProps,
+    InputNumber,
+    Space,
+} from "antd";
 
 import { OrganizationInput } from "components";
 import { useRepositories, useDebounced, useOrganizations } from "hooks";
@@ -8,24 +17,89 @@ import { useStateContextSelector } from "contextSelectors";
 const Home: React.FC = () => {
     const [form] = Form.useForm();
 
-    const { data, isLoading, isFetching } = useRepositories();
+    const { data, isFetching } = useRepositories();
+
+    const { isOrganizationValid } = useOrganizations();
+
+    const setMinIssues = useStateContextSelector((v) => v.setMinIssues);
+    const setMaxIssues = useStateContextSelector((v) => v.setMaxIssues);
+    const minIssues = useStateContextSelector((v) => v.minIssues);
+    const maxIssues = useStateContextSelector((v) => v.maxIssues);
+    const isIssueNumbersValid = useStateContextSelector(
+        (v) => v.isIssueNumbersValid,
+    );
+
+    const repositoryList = data?.data.items.filter(
+        (i) =>
+            (maxIssues ? i.open_issues_count < maxIssues : true) &&
+            (minIssues ? i.open_issues_count > minIssues : true),
+    );
+
+    console.log({ isIssueNumbersValid, minIssues, maxIssues });
 
     // console.log({ data: data?.data, isLoading, isFetching });
 
     return (
         <Row style={{ margin: 16 }} gutter={16}>
             <Col span={24}>
-                <Form form={form} /* wrapperCol={{ span: 8 }} */>
-                    <Form.Item name="orgs">
-                        <OrganizationInput />
-                    </Form.Item>
-                    <Form.Item name="orgs">
-                        <RepositoryInput />
-                    </Form.Item>
+                <Form
+                    layout="vertical"
+                    form={form} /* wrapperCol={{ span: 12 }} */
+                >
+                    <Row gutter={24}>
+                        <Col span="24">
+                            <Form.Item name="organizations">
+                                <OrganizationInput />
+                            </Form.Item>
+                        </Col>
+                        <Col span="12">
+                            <Form.Item
+                                label="Filter repository by name"
+                                name="repositories"
+                            >
+                                <RepositoryInput />
+                            </Form.Item>
+                        </Col>
+
+                        <Col span="12">
+                            <Form.Item
+                                label="Filter by number of issues"
+                                validateStatus={
+                                    isIssueNumbersValid ? "success" : "error"
+                                }
+                                help={
+                                    isIssueNumbersValid
+                                        ? ""
+                                        : "Conflicting min and max values"
+                                }
+                                name="minIssues"
+                            >
+                                <Space>
+                                    <InputNumber
+                                        onChange={(value: number) => {
+                                            // console.log({ value });
+                                            setMinIssues(value);
+                                        }}
+                                        disabled={!isOrganizationValid}
+                                    />
+                                    <InputNumber
+                                        onChange={(value: number) =>
+                                            setMaxIssues(value)
+                                        }
+                                        disabled={!isOrganizationValid}
+                                    />
+                                </Space>
+                            </Form.Item>
+                        </Col>
+
+                        {/* <Form.Item name="maxIssues">
+                        <InputNumber />
+                    </Form.Item> */}
+                    </Row>
                 </Form>
             </Col>
             <Col span={24}>
-                <Table dataSource={data?.data?.items} loading={isFetching}>
+                <Table dataSource={repositoryList} loading={isFetching}>
                     <Table.Column
                         dataIndex="name"
                         title="Name"

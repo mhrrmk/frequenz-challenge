@@ -23,7 +23,7 @@ export const useRepositories = () => {
 
     const { isOrganizationValid } = useOrganizations();
 
-    console.log({ organization, repository, isOrganizationValid });
+    // console.log({ organization, repository, isOrganizationValid });
 
     return useQuery<ResponseType<RepositoryResponseType>>(
         ["repositories", { organization, repository, isOrganizationValid }],
