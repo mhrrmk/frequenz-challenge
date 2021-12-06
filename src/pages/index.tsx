@@ -35,7 +35,7 @@ const Home: React.FC = () => {
             (minIssues ? i.open_issues_count > minIssues : true),
     );
 
-    console.log({ isIssueNumbersValid, minIssues, maxIssues });
+    // console.log({ isIssueNumbersValid, minIssues, maxIssues });
 
     // console.log({ data: data?.data, isLoading, isFetching });
 
@@ -156,14 +156,32 @@ const Home: React.FC = () => {
 
 const RepositoryInput: React.FC<InputProps> = (props) => {
     const setRepository = useStateContextSelector((v) => v.setRepository);
+    const organization = useStateContextSelector((v) => v.organization);
+
+    // console.log({ organization });
+
+    // const setRepositoryLocal = (repo: string) => {
+    //     const localFilters = JSON.parse(localStorage.getItem(organization));
+
+    //     console.log({ organization, repo, localFilters });
+
+    //     localStorage.setItem(
+    //         organization,
+    //         JSON.stringify({ ...localFilters, repo }),
+    //     );
+    //     setRepository(repo);
+    // };
 
     const { isOrganizationValid } = useOrganizations();
 
-    const onChange = useDebounced((e) => {
-        const repository = e.target.value;
-        // console.log({ repository });
-        setRepository(repository);
-    });
+    const onChange = useDebounced(
+        (e) => {
+            const repository = e.target.value;
+            console.log("debounce:", { organization });
+            setRepository(repository);
+        },
+        [organization],
+    );
 
     return (
         <Input
