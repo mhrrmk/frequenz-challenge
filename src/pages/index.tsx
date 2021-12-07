@@ -12,7 +12,6 @@ import {
 import { OrganizationInput } from "components";
 import { useRepositories, useDebounced, useOrganizations } from "hooks";
 
-import { useStateContextSelector } from "contextSelectors";
 import { useCallback, useState } from "react";
 import { useStore, useIsIssueNumbersValid } from "store";
 
@@ -94,10 +93,6 @@ const Home: React.FC = () => {
                                 </Space>
                             </Form.Item>
                         </Col>
-
-                        {/* <Form.Item name="maxIssues">
-                        <InputNumber />
-                    </Form.Item> */}
                     </Row>
                 </Form>
             </Col>

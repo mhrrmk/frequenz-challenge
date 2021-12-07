@@ -44,7 +44,6 @@ export const useRepositories = () => {
         {
             keepPreviousData: true,
             refetchOnWindowFocus: false,
-            // enabled: isOrganizationValid,
         },
     );
 };
