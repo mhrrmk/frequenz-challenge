@@ -21,10 +21,30 @@ export const useStore = create<State>((set, get) => ({
     repositoryInput: "",
     minIssues: null,
     maxIssues: null,
-    setOrganization: (organization) =>
-        set(() => ({
+    setOrganization: (organization) => {
+        const localFilters = JSON.parse(localStorage.getItem("filters")) ?? {};
+
+        const localOrganizationFilters: LocalFilters | undefined =
+            localFilters[organization];
+
+        const repository = localOrganizationFilters?.repository ?? "";
+        const minIssues =
+            localOrganizationFilters?.minIssues !== undefined
+                ? localOrganizationFilters?.minIssues
+                : null;
+        const maxIssues =
+            localOrganizationFilters?.maxIssues !== undefined
+                ? localOrganizationFilters?.maxIssues
+                : null;
+
+        return set(() => ({
             organization,
-        })),
+            repository,
+            repositoryInput: repository,
+            maxIssues,
+            minIssues,
+        }));
+    },
     setRepositoryInput: (repository) =>
         set(() => ({
             repositoryInput: repository,
