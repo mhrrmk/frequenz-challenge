@@ -1,4 +1,6 @@
 import { useQuery } from "react-query";
+import { notification } from "antd";
+import { AxiosError } from "axios";
 
 import { githubSearchApi } from "api";
 import { useOrganizations } from "hooks";
@@ -38,12 +40,24 @@ export const useRepositories = () => {
             }
             return githubSearchApi({
                 url: "repositories",
-                params: { q: `${repository} org:${organization} in:name` },
+                params: {
+                    q: `${repository} org:${organization} in:name`,
+                },
             });
         },
         {
             keepPreviousData: true,
             refetchOnWindowFocus: false,
+            onError: (err: AxiosError) => {
+                console.log({ err });
+                notification.open({
+                    key: "repositories",
+                    message: "Repositories Query",
+                    description: err.response.data.message,
+                    duration: 15,
+                });
+            },
+            retry: false,
         },
     );
 };

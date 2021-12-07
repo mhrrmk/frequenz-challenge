@@ -1,7 +1,9 @@
 import { useQuery } from "react-query";
+import { notification } from "antd";
 
 import { githubSearchApi } from "api";
 import { useStore } from "store";
+import { AxiosError } from "axios";
 
 type OrganizationResponseType = {
     items: Array<{ login: string }>;
@@ -15,7 +17,7 @@ type ResponseType<Data> = {
 export const useOrganizations = () => {
     const organization = useStore((state) => state.organization);
 
-    console.log({ organization });
+    // console.log({ organization });
 
     const queryResult = useQuery<ResponseType<OrganizationResponseType>>(
         ["organizations", { organization }],
@@ -36,6 +38,16 @@ export const useOrganizations = () => {
         {
             keepPreviousData: true,
             refetchOnWindowFocus: false,
+            onError: (err: AxiosError) => {
+                console.log({ err });
+                notification.open({
+                    key: "organizations",
+                    message: "Organizations Query",
+                    description: err.response.data.message,
+                    duration: 15,
+                });
+            },
+            retry: false,
         },
     );
 
