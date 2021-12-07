@@ -11,8 +11,10 @@ export type State = {
     // organizationSearch: string;
     // setOrganizationSearch: ReactSetStateType<State["organizationSearch"]>;
     repository: string;
+    repositoryValue: string;
     // setRepository: ReactSetStateType<State["repository"]>;
     setRepository: (repository: string) => void;
+    setRepositoryValue: (repository: string) => void;
     minIssues: IssuesType;
     // setMinIssues: ReactSetStateType<State["minIssues"]>;
     setMinIssues: (minIssues: IssuesType) => void;
@@ -35,7 +37,7 @@ const setLocalFilters = (
 ) => {
     const localFilters = JSON.parse(localStorage.getItem("filters")) ?? {};
 
-    console.log({ localFilters });
+    // console.log({ localFilters });
 
     localStorage.setItem(
         "filters",
@@ -54,16 +56,51 @@ const setLocalFilters = (
 };
 
 export const StateProvider: React.FC = ({ children }) => {
-    const [organization, setOrganization] = useState("");
+    const [organization, setOrganizationState] = useState("");
     // const [organizationSearch, setOrganizationSearch] = useState("");
     const [repository, setRepositoryState] = useState("");
+    const [repositoryValue, setRepositoryValue] = useState("");
     const [minIssues, setMinIssuesState] = useState<number | null>();
     const [maxIssues, setMaxIssuesState] = useState<number | null>();
 
-    console.log({ minIssues, maxIssues });
+    const setOrganization = (organization: string) => {
+        setOrganizationState(organization);
+
+        const localFilters = JSON.parse(localStorage.getItem("filters")) ?? {};
+
+        const localOrganizationFilters: LocalFilters | undefined =
+            localFilters[organization];
+
+        // console.log({ localFilters, localOrganizationFilters });
+
+        // if (localOrganizationFilters) {
+        if (localOrganizationFilters?.repository) {
+            setRepositoryState(localOrganizationFilters.repository);
+            setRepositoryValue(localOrganizationFilters.repository);
+        } else {
+            setRepositoryState("");
+            setRepositoryValue("");
+        }
+        if (localOrganizationFilters?.minIssues !== undefined) {
+            setMinIssuesState(localOrganizationFilters.minIssues);
+        } else {
+            setMinIssuesState(null);
+        }
+        if (localOrganizationFilters?.maxIssues !== undefined) {
+            setMaxIssuesState(localOrganizationFilters.maxIssues);
+        } else {
+            setMaxIssuesState(null);
+        }
+        // setOrganizationState(organization);
+
+        // }
+    };
+
+    console.log({ organization });
 
     const setRepository = useCallback(
         (repository: string) => {
+            console.log("setrepo", { organization });
             setLocalFilters(organization, { repository });
             setRepositoryState(repository);
         },
@@ -98,6 +135,8 @@ export const StateProvider: React.FC = ({ children }) => {
                 // setOrganizationSearch,
                 repository,
                 setRepository,
+                repositoryValue,
+                setRepositoryValue,
                 minIssues,
                 setMinIssues,
                 maxIssues,

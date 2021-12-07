@@ -8,11 +8,13 @@ import {
     InputNumber,
     Space,
 } from "antd";
+import debounce from "lodash.debounce";
 
 import { OrganizationInput } from "components";
 import { useRepositories, useDebounced, useOrganizations } from "hooks";
 
 import { useStateContextSelector } from "contextSelectors";
+import { useCallback, useState } from "react";
 
 const Home: React.FC = () => {
     const [form] = Form.useForm();
@@ -80,12 +82,14 @@ const Home: React.FC = () => {
                                             // console.log({ value });
                                             setMinIssues(value);
                                         }}
+                                        value={minIssues}
                                         disabled={!isOrganizationValid}
                                     />
                                     <InputNumber
                                         onChange={(value: number) =>
                                             setMaxIssues(value)
                                         }
+                                        value={maxIssues}
                                         disabled={!isOrganizationValid}
                                     />
                                 </Space>
@@ -156,37 +160,36 @@ const Home: React.FC = () => {
 
 const RepositoryInput: React.FC<InputProps> = (props) => {
     const setRepository = useStateContextSelector((v) => v.setRepository);
+    const repositoryValue = useStateContextSelector((v) => v.repositoryValue);
+    const repository = useStateContextSelector((v) => v.repository);
+    const setRepositoryValue = useStateContextSelector(
+        (v) => v.setRepositoryValue,
+    );
     const organization = useStateContextSelector((v) => v.organization);
-
-    // console.log({ organization });
-
-    // const setRepositoryLocal = (repo: string) => {
-    //     const localFilters = JSON.parse(localStorage.getItem(organization));
-
-    //     console.log({ organization, repo, localFilters });
-
-    //     localStorage.setItem(
-    //         organization,
-    //         JSON.stringify({ ...localFilters, repo }),
-    //     );
-    //     setRepository(repo);
-    // };
 
     const { isOrganizationValid } = useOrganizations();
 
-    const onChange = useDebounced(
+    const onRepositoryChange = useCallback(
         (e) => {
             const repository = e.target.value;
-            console.log("debounce:", { organization });
+            setRepositoryValue(repository);
+            setRepositoryDebounced(repository);
+        },
+        [repository, organization],
+    );
+
+    const setRepositoryDebounced = useDebounced(
+        (repository) => {
             setRepository(repository);
         },
-        [organization],
+        [organization, repository],
     );
 
     return (
         <Input
             {...props}
-            onChange={onChange}
+            value={repositoryValue}
+            onChange={onRepositoryChange}
             placeholder="Type to filter"
             disabled={!isOrganizationValid}
         />
