@@ -1,8 +1,8 @@
 import { useQuery } from "react-query";
 
-import { useStateContextSelector } from "contextSelectors";
 import { githubSearchApi } from "api";
 import { useOrganizations } from "hooks";
+import { useStore } from "store";
 
 type RepositoryResponseType = {
     items: Array<{
@@ -18,8 +18,8 @@ type ResponseType<Data> = {
 };
 
 export const useRepositories = () => {
-    const organization = useStateContextSelector((v) => v.organization);
-    const repository = useStateContextSelector((v) => v.repository);
+    const organization = useStore((state) => state.organization);
+    const repository = useStore((state) => state.repository);
 
     const { isOrganizationValid } = useOrganizations();
 
@@ -43,7 +43,7 @@ export const useRepositories = () => {
         },
         {
             keepPreviousData: true,
-            // refetchOnWindowFocus: false,
+            refetchOnWindowFocus: false,
             // enabled: isOrganizationValid,
         },
     );

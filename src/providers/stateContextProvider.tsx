@@ -6,21 +6,20 @@ type ReactSetStateType<T> = React.Dispatch<React.SetStateAction<T>>;
 type IssuesType = number | null;
 
 export type State = {
-    organization: string;
-    setOrganization: ReactSetStateType<State["organization"]>;
+    // organization: string;
+    // setOrganization: ReactSetStateType<State["organization"]>;
     // organizationSearch: string;
     // setOrganizationSearch: ReactSetStateType<State["organizationSearch"]>;
-    repository: string;
-    repositoryValue: string;
+    // repository: string;
+    // repositoryValue: string;
     // setRepository: ReactSetStateType<State["repository"]>;
-    setRepository: (repository: string) => void;
-    setRepositoryValue: (repository: string) => void;
-    minIssues: IssuesType;
+    // setRepository: (repository: string) => void;
+    // setRepositoryValue: (repository: string) => void;
     // setMinIssues: ReactSetStateType<State["minIssues"]>;
-    setMinIssues: (minIssues: IssuesType) => void;
-    maxIssues: IssuesType;
-    setMaxIssues: (maxIssues: IssuesType) => void;
-    isIssueNumbersValid: boolean;
+    // setMinIssues: (minIssues: IssuesType) => void;
+    // maxIssues: IssuesType;
+    // setMaxIssues: (maxIssues: IssuesType) => void;
+    // isIssueNumbersValid: boolean;
 };
 
 export const stateContext = createContext<State>(null);
@@ -123,26 +122,28 @@ export const StateProvider: React.FC = ({ children }) => {
         [organization, maxIssues],
     );
 
-    const isIssueNumbersValid =
-        minIssues && maxIssues ? minIssues < maxIssues : true;
+    // const isIssueNumbersValid =
+    //     minIssues && maxIssues ? minIssues < maxIssues : true;
 
     return (
         <stateContext.Provider
-            value={{
-                organization,
-                setOrganization,
-                // organizationSearch,
-                // setOrganizationSearch,
-                repository,
-                setRepository,
-                repositoryValue,
-                setRepositoryValue,
-                minIssues,
-                setMinIssues,
-                maxIssues,
-                setMaxIssues,
-                isIssueNumbersValid,
-            }}
+            value={
+                {
+                    // organization,
+                    // organizationSearch,
+                    // setOrganizationSearch,
+                    // repository,
+                    // repositoryValue,
+                    // minIssues,
+                    // maxIssues,
+                    // setOrganization,
+                    // setRepository,
+                    // setRepositoryValue,
+                    // setMinIssues,
+                    // setMaxIssues,
+                    // isIssueNumbersValid,
+                }
+            }
         >
             {children}
         </stateContext.Provider>

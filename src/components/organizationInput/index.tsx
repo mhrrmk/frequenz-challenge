@@ -1,10 +1,10 @@
 import { AutoComplete, AutoCompleteProps } from "antd";
 
-import { useStateContextSelector } from "contextSelectors";
 import { useDebounced, useOrganizations } from "hooks";
+import { useStore } from "store";
 
 export const OrganizationInput: React.FC<AutoCompleteProps> = (props) => {
-    const setOrganization = useStateContextSelector((v) => v.setOrganization);
+    const setOrganization = useStore((state) => state.setOrganization);
 
     const onChange = useDebounced((value) => {
         // console.log({ org: value });

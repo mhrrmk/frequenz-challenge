@@ -8,13 +8,13 @@ import {
     InputNumber,
     Space,
 } from "antd";
-import debounce from "lodash.debounce";
 
 import { OrganizationInput } from "components";
 import { useRepositories, useDebounced, useOrganizations } from "hooks";
 
 import { useStateContextSelector } from "contextSelectors";
 import { useCallback, useState } from "react";
+import { useStore, useIsIssueNumbersValid } from "store";
 
 const Home: React.FC = () => {
     const [form] = Form.useForm();
@@ -23,13 +23,12 @@ const Home: React.FC = () => {
 
     const { isOrganizationValid } = useOrganizations();
 
-    const setMinIssues = useStateContextSelector((v) => v.setMinIssues);
-    const setMaxIssues = useStateContextSelector((v) => v.setMaxIssues);
-    const minIssues = useStateContextSelector((v) => v.minIssues);
-    const maxIssues = useStateContextSelector((v) => v.maxIssues);
-    const isIssueNumbersValid = useStateContextSelector(
-        (v) => v.isIssueNumbersValid,
-    );
+    const setMinIssues = useStore((state) => state.setMinIssues);
+    const setMaxIssues = useStore((state) => state.setMaxIssues);
+    const minIssues = useStore((state) => state.minIssues);
+    const maxIssues = useStore((state) => state.maxIssues);
+
+    const isIssueNumbersValid = useIsIssueNumbersValid();
 
     const repositoryList = data?.data.items.filter(
         (i) =>
@@ -159,20 +158,18 @@ const Home: React.FC = () => {
 };
 
 const RepositoryInput: React.FC<InputProps> = (props) => {
-    const setRepository = useStateContextSelector((v) => v.setRepository);
-    const repositoryValue = useStateContextSelector((v) => v.repositoryValue);
-    const repository = useStateContextSelector((v) => v.repository);
-    const setRepositoryValue = useStateContextSelector(
-        (v) => v.setRepositoryValue,
-    );
-    const organization = useStateContextSelector((v) => v.organization);
+    const setRepository = useStore((state) => state.setRepository);
+    const repository = useStore((state) => state.repository);
+    const organization = useStore((state) => state.organization);
+    const repositoryInput = useStore((state) => state.repositoryInput);
+    const setRepositoryInput = useStore((state) => state.setRepositoryInput);
 
     const { isOrganizationValid } = useOrganizations();
 
     const onRepositoryChange = useCallback(
         (e) => {
             const repository = e.target.value;
-            setRepositoryValue(repository);
+            setRepositoryInput(repository);
             setRepositoryDebounced(repository);
         },
         [repository, organization],
@@ -188,7 +185,7 @@ const RepositoryInput: React.FC<InputProps> = (props) => {
     return (
         <Input
             {...props}
-            value={repositoryValue}
+            value={repositoryInput}
             onChange={onRepositoryChange}
             placeholder="Type to filter"
             disabled={!isOrganizationValid}

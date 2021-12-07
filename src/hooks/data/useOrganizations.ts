@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 
-import { useStateContextSelector } from "contextSelectors";
 import { githubSearchApi } from "api";
+import { useStore } from "store";
 
 type OrganizationResponseType = {
     items: Array<{ login: string }>;
@@ -13,7 +13,9 @@ type ResponseType<Data> = {
 };
 
 export const useOrganizations = () => {
-    const organization = useStateContextSelector((v) => v.organization);
+    const organization = useStore((state) => state.organization);
+
+    console.log({ organization });
 
     const queryResult = useQuery<ResponseType<OrganizationResponseType>>(
         ["organizations", { organization }],
@@ -33,7 +35,7 @@ export const useOrganizations = () => {
         },
         {
             keepPreviousData: true,
-            // refetchOnWindowFocus: false,
+            refetchOnWindowFocus: false,
         },
     );
 
