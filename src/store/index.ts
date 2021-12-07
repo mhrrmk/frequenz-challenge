@@ -15,32 +15,44 @@ type State = {
     setMaxIssues: (maxIssues: IssuesType) => void;
 };
 
-export const useStore = create<State>((set) => ({
+export const useStore = create<State>((set, get) => ({
     organization: "",
     repository: "",
     repositoryInput: "",
     minIssues: null,
     maxIssues: null,
-    setRepositoryInput: (repository) =>
-        set(() => ({
-            repositoryInput: repository,
-        })),
-    setRepository: (repository) =>
-        set(() => ({
-            repository,
-        })),
     setOrganization: (organization) =>
         set(() => ({
             organization,
         })),
-    setMinIssues: (minIssues) =>
+    setRepositoryInput: (repository) =>
         set(() => ({
+            repositoryInput: repository,
+        })),
+    setRepository: (repository) => {
+        const organization = get().organization;
+        setLocalFilters(organization, { repository });
+
+        return set(() => ({
+            repository,
+        }));
+    },
+    setMinIssues: (minIssues) => {
+        const organization = get().organization;
+        setLocalFilters(organization, { minIssues });
+
+        return set(() => ({
             minIssues,
-        })),
-    setMaxIssues: (maxIssues) =>
-        set(() => ({
+        }));
+    },
+    setMaxIssues: (maxIssues) => {
+        const organization = get().organization;
+        setLocalFilters(organization, { maxIssues });
+
+        return set(() => ({
             maxIssues,
-        })),
+        }));
+    },
 }));
 
 export const useIsIssueNumbersValid = () => {
@@ -48,4 +60,34 @@ export const useIsIssueNumbersValid = () => {
     const maxIssues = useStore((state) => state.maxIssues);
 
     return minIssues && maxIssues ? minIssues < maxIssues : true;
+};
+
+type LocalFilters = {
+    repository?: string;
+    minIssues?: IssuesType;
+    maxIssues?: IssuesType;
+};
+
+const setLocalFilters = (
+    organization: string,
+    { repository, minIssues, maxIssues }: LocalFilters,
+) => {
+    const localFilters = JSON.parse(localStorage.getItem("filters")) ?? {};
+
+    // console.log({ localFilters });
+
+    localStorage.setItem(
+        "filters",
+        JSON.stringify({
+            ...localFilters,
+            [organization]: {
+                ...(localFilters[organization]
+                    ? localFilters[organization]
+                    : {}),
+                ...(repository !== undefined ? { repository } : {}),
+                ...(minIssues !== undefined ? { minIssues } : {}),
+                ...(maxIssues !== undefined ? { maxIssues } : {}),
+            },
+        }),
+    );
 };
