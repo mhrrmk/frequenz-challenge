@@ -15,15 +15,12 @@ export const RepositoriesTable = () => {
             (minIssues ? i.open_issues_count > minIssues : true),
     );
 
-    console.log({ isFetching, repositoryList, data });
-
     return (
         <Table dataSource={repositoryList} loading={isFetching}>
             <Table.Column
                 dataIndex="name"
                 title="Name"
                 sorter={(a: { name: string }, b: { name: string }) => {
-                    // console.log({ a, b });
                     if (a.name > b.name) return 1;
                     if (a.name < b.name) return -1;
                     return 0;
@@ -40,7 +37,6 @@ export const RepositoriesTable = () => {
                         stargazers_count: number;
                     },
                 ) => {
-                    // console.log({ a, b });
                     if (a.stargazers_count > b.stargazers_count) return 1;
                     if (a.stargazers_count < b.stargazers_count) return -1;
                     return 0;
@@ -57,7 +53,6 @@ export const RepositoriesTable = () => {
                         open_issues_count: number;
                     },
                 ) => {
-                    // console.log({ a, b });
                     if (a.open_issues_count > b.open_issues_count) return 1;
                     if (a.open_issues_count < b.open_issues_count) return -1;
                     return 0;

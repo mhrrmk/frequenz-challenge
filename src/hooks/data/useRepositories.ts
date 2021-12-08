@@ -11,6 +11,8 @@ type RepositoryResponseType = {
         name: string;
         stargazers_count: number;
         open_issues_count: number;
+        created_at: string;
+        updated_at: string;
     }>;
     total_count: number;
 };
@@ -24,8 +26,6 @@ export const useRepositories = () => {
     const repository = useStore((state) => state.repository);
 
     const { isOrganizationValid } = useOrganizations();
-
-    // console.log({ organization, repository, isOrganizationValid });
 
     return useQuery<ResponseType<RepositoryResponseType>>(
         ["repositories", { organization, repository, isOrganizationValid }],
@@ -49,7 +49,6 @@ export const useRepositories = () => {
             keepPreviousData: true,
             refetchOnWindowFocus: false,
             onError: (err: AxiosError) => {
-                console.log({ err });
                 notification.open({
                     key: "repositories",
                     message: "Repositories Query",

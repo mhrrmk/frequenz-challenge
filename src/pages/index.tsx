@@ -5,6 +5,7 @@ import {
     RepositoryInput,
     RepositoriesTable,
     IssuesInput,
+    Charts,
 } from "components";
 import { useRepositories } from "hooks";
 
@@ -14,59 +15,62 @@ const Home: React.FC = () => {
     const isIssueNumbersValid = useIsIssueNumbersValid();
 
     const { refetch } = useRepositories();
-
-    // console.log({ isIssueNumbersValid, minIssues, maxIssues });
-
-    // console.log({ data: data?.data, isLoading, isFetching });
-
     return (
-        <Row style={{ margin: 16 }} gutter={16}>
-            <Col span={24}>
-                <Form
-                    layout="vertical"
-                    // form={form} /* wrapperCol={{ span: 12 }} */
-                >
-                    <Row gutter={24}>
-                        <Col span="24">
-                            <Form.Item name="organizations">
-                                <OrganizationInput />
-                            </Form.Item>
-                        </Col>
-                        <Col span="12">
-                            <Form.Item
-                                label="Filter repository by name"
-                                name="repositories"
-                            >
-                                <RepositoryInput />
-                            </Form.Item>
-                        </Col>
+        <div style={{ padding: 16 }}>
+            <Row gutter={[16, 16]}>
+                <Col span={24}>
+                    <Form layout="vertical">
+                        <Row gutter={24}>
+                            <Col span="24">
+                                <Form.Item
+                                    wrapperCol={{ span: 8 }}
+                                    name="organizations"
+                                >
+                                    <OrganizationInput />
+                                </Form.Item>
+                            </Col>
+                            <Col span="8">
+                                <Form.Item
+                                    // wrapperCol={{ span: 12 }}
+                                    label="Filter repository by name"
+                                    name="repositories"
+                                >
+                                    <RepositoryInput />
+                                </Form.Item>
+                            </Col>
 
-                        <Col span="12">
-                            <Form.Item
-                                label="Filter by number of issues"
-                                validateStatus={
-                                    isIssueNumbersValid ? "success" : "error"
-                                }
-                                help={
-                                    isIssueNumbersValid
-                                        ? ""
-                                        : "Conflicting min and max values"
-                                }
-                                name="minIssues"
-                            >
-                                <IssuesInput />
-                            </Form.Item>
-                        </Col>
-                        <Col span="8">
-                            <Button onClick={() => refetch()}>Retry</Button>
-                        </Col>
-                    </Row>
-                </Form>
-            </Col>
-            <Col span={24}>
-                <RepositoriesTable />
-            </Col>
-        </Row>
+                            <Col span="6">
+                                <Form.Item
+                                    label="Filter by number of issues"
+                                    validateStatus={
+                                        isIssueNumbersValid
+                                            ? "success"
+                                            : "error"
+                                    }
+                                    help={
+                                        isIssueNumbersValid
+                                            ? ""
+                                            : "Conflicting min and max values"
+                                    }
+                                    name="minIssues"
+                                >
+                                    <IssuesInput />
+                                </Form.Item>
+                            </Col>
+                            <Col span="24">
+                                <Button onClick={() => refetch()}>Retry</Button>
+                            </Col>
+                        </Row>
+                    </Form>
+                </Col>
+                <Col span={12}>
+                    <RepositoriesTable />
+                </Col>
+                <Col span={12}>
+                    <Charts />
+                </Col>
+            </Row>
+        </div>
     );
 };
 

@@ -17,8 +17,6 @@ type ResponseType<Data> = {
 export const useOrganizations = () => {
     const organization = useStore((state) => state.organization);
 
-    // console.log({ organization });
-
     const queryResult = useQuery<ResponseType<OrganizationResponseType>>(
         ["organizations", { organization }],
         () => {
@@ -39,7 +37,6 @@ export const useOrganizations = () => {
             keepPreviousData: true,
             refetchOnWindowFocus: false,
             onError: (err: AxiosError) => {
-                console.log({ err });
                 notification.open({
                     key: "organizations",
                     message: "Organizations Query",

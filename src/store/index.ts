@@ -94,8 +94,6 @@ const setLocalFilters = (
 ) => {
     const localFilters = JSON.parse(localStorage.getItem("filters")) ?? {};
 
-    // console.log({ localFilters });
-
     localStorage.setItem(
         "filters",
         JSON.stringify({
