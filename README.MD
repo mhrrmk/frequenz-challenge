@@ -1,6 +1,6 @@
 # frequenz-challenge
 
-This project was generated with [superplate](https://github.com/pankod/superplate).
+[https://frequenz-challenge.vercel.app/](https://frequenz-challenge.vercel.app/).
 
 ## Available Scripts
 
