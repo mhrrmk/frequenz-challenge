@@ -1,6 +1,6 @@
 # frequenz-challenge
 
-[https://frequenz-challenge.vercel.app/](https://frequenz-challenge.vercel.app/).
+[https://frequenz-challenge.vercel.app](https://frequenz-challenge.vercel.app).
 
 ## Available Scripts
 
