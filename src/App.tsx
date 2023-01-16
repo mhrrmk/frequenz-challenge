@@ -1,7 +1,7 @@
 import "antd/dist/antd.css";
 import "styles/global.css";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
+// import { ReactQueryDevtools } from "react-query/devtools";
 
 import Home from "pages";
 
