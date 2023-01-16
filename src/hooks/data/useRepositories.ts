@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from '@tanstack/react-query';
 import { notification } from "antd";
 import { AxiosError } from "axios";
 
@@ -27,7 +27,7 @@ export const useRepositories = () => {
 
     const { isOrganizationValid } = useOrganizations();
 
-    return useQuery<ResponseType<RepositoryResponseType>>(
+    return useQuery<ResponseType<RepositoryResponseType>, AxiosError>(
         ["repositories", { organization, repository, isOrganizationValid }],
         () => {
             if (/* repository === "" ||  */ !isOrganizationValid) {
@@ -48,11 +48,11 @@ export const useRepositories = () => {
         {
             keepPreviousData: true,
             refetchOnWindowFocus: false,
-            onError: (err: AxiosError) => {
+            onError: (err) => {
                 notification.open({
                     key: "repositories",
                     message: "Repositories Query",
-                    description: err.response.data.message,
+                    description: err.response?.data.message,
                     duration: 15,
                 });
             },

@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from '@tanstack/react-query';
 import { notification } from "antd";
 
 import { githubSearchApi } from "api";
@@ -17,7 +17,7 @@ type ResponseType<Data> = {
 export const useOrganizations = () => {
     const organization = useStore((state) => state.organization);
 
-    const queryResult = useQuery<ResponseType<OrganizationResponseType>>(
+    const queryResult = useQuery<ResponseType<OrganizationResponseType>, AxiosError, ResponseType<OrganizationResponseType>>(
         ["organizations", { organization }],
         () => {
             if (organization === "") {
@@ -36,11 +36,11 @@ export const useOrganizations = () => {
         {
             keepPreviousData: true,
             refetchOnWindowFocus: false,
-            onError: (err: AxiosError) => {
+            onError: (err) => {
                 notification.open({
                     key: "organizations",
                     message: "Organizations Query",
-                    description: err.response.data.message,
+                    description: err.response?.data.message,
                     duration: 15,
                 });
             },

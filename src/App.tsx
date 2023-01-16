@@ -1,6 +1,6 @@
 import "antd/dist/antd.css";
 import "styles/global.css";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 // import { ReactQueryDevtools } from "react-query/devtools";
 
 import Home from "pages";
