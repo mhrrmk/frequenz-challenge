@@ -13,6 +13,8 @@
         "@typescript-eslint"
     ],
     "extends": [
+        "eslint:recommended",
+        "prettier",
         "plugin:react/recommended",
         "plugin:@typescript-eslint/recommended"
     ],
@@ -32,7 +34,8 @@
         "@typescript-eslint/explicit-function-return-type": "off",
         "react/prop-types": "off",
         "react/react-in-jsx-scope": "off",
-        "prettier/prettier": "error"
+        "prettier/prettier": "error",
+        "no-unused-vars": "warn"
     },
     "settings": {
         "react": {

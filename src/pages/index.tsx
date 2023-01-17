@@ -1,4 +1,4 @@
-import { Row, Col, Form, Button } from "antd";
+import { Row, Col, Form, Button } from 'antd';
 
 import {
     OrganizationInput,
@@ -6,15 +6,15 @@ import {
     RepositoriesTable,
     IssuesInput,
     Charts,
-} from "components";
-import { useRepositories } from "hooks";
+} from 'components';
+import { useRepositories } from 'hooks';
 
-import { useIsIssueNumbersValid } from "store";
+import { useIsIssueNumbersValid } from 'store';
 
 const Home: React.FC = () => {
     const isIssueNumbersValid = useIsIssueNumbersValid();
 
-    const { refetch } = useRepositories();
+    const { refetch, data } = useRepositories();
     return (
         <div style={{ padding: 16 }}>
             <Row gutter={[16, 16]}>
@@ -44,13 +44,13 @@ const Home: React.FC = () => {
                                     label="Filter by number of issues"
                                     validateStatus={
                                         isIssueNumbersValid
-                                            ? "success"
-                                            : "error"
+                                            ? 'success'
+                                            : 'error'
                                     }
                                     help={
                                         isIssueNumbersValid
-                                            ? ""
-                                            : "Conflicting min and max values"
+                                            ? ''
+                                            : 'Conflicting min and max values'
                                     }
                                     name="minIssues"
                                 >
