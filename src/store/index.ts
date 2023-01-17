@@ -22,8 +22,10 @@ export const useStore = create<State>((set, get) => ({
     minIssues: null,
     maxIssues: null,
     setOrganization: (organization) => {
-        const localFilters =
-            JSON.parse(localStorage.getItem("filters") ?? "") ?? {};
+        const localStorageFilters = localStorage.getItem("filters");
+        const localFilters = localStorageFilters
+            ? JSON.parse(localStorageFilters)
+            : {};
 
         const localOrganizationFilters: LocalFilters | undefined =
             localFilters[organization];
@@ -93,8 +95,10 @@ const setLocalFilters = (
     organization: string,
     { repository, minIssues, maxIssues }: LocalFilters,
 ) => {
-    const localFilters =
-        JSON.parse(localStorage.getItem("filters") ?? "") ?? {};
+    const localStorageFilters = localStorage.getItem("filters");
+    const localFilters = localStorageFilters
+        ? JSON.parse(localStorageFilters)
+        : {};
 
     localStorage.setItem(
         "filters",
