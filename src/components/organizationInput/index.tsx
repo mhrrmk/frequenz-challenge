@@ -6,7 +6,7 @@ import { useStore } from "store";
 export const OrganizationInput: React.FC<AutoCompleteProps> = (props) => {
     const setOrganization = useStore((state) => state.setOrganization);
 
-    const onChange = useDebounced((value) => {
+    const onChange = useDebounced((value: string) => {
         setOrganization(value);
     });
 

@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { notification } from "antd";
+import { notification } from 'antd';
 
-import { githubSearchApi } from "api";
-import { useStore } from "store";
-import { AxiosError } from "axios";
+import { githubSearchApi } from 'api';
+import { useStore } from 'store';
+import { AxiosError } from 'axios';
 
 type OrganizationResponseType = {
     items: Array<{ login: string }>;
@@ -17,10 +17,14 @@ type ResponseType<Data> = {
 export const useOrganizations = () => {
     const organization = useStore((state) => state.organization);
 
-    const queryResult = useQuery<ResponseType<OrganizationResponseType>, AxiosError, ResponseType<OrganizationResponseType>>(
-        ["organizations", { organization }],
+    const queryResult = useQuery<
+        ResponseType<OrganizationResponseType>,
+        AxiosError,
+        ResponseType<OrganizationResponseType>
+    >(
+        ['organizations', { organization }],
         () => {
-            if (organization === "") {
+            if (organization === '') {
                 return {
                     data: {
                         items: [],
@@ -29,7 +33,7 @@ export const useOrganizations = () => {
                 };
             }
             return githubSearchApi({
-                url: "users",
+                url: 'users',
                 params: { q: `${organization} type:org` },
             });
         },
@@ -38,8 +42,8 @@ export const useOrganizations = () => {
             refetchOnWindowFocus: false,
             onError: (err) => {
                 notification.open({
-                    key: "organizations",
-                    message: "Organizations Query",
+                    key: 'organizations',
+                    message: 'Organizations Query',
                     description: err.response?.data.message,
                     duration: 15,
                 });

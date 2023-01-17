@@ -17,7 +17,8 @@
   "devDependencies": {
     "@tanstack/react-query-devtools": "^4.22.0",
     "@types/jest": "^26.0.23",
-    "@types/node": "^12.20.10",
+    "@types/lodash.debounce": "^4.0.7",
+    "@types/node": "^18.11.18",
     "@types/react": "^17.0.4",
     "@types/react-dom": "^17.0.3",
     "@typescript-eslint/eslint-plugin": "^5.48.2",
@@ -37,7 +38,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint"
   },
   "eslintConfig": {
     "extends": [

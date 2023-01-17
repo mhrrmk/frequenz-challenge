@@ -23,7 +23,7 @@ export const RepositoryInput: React.FC<InputProps> = (props) => {
     );
 
     const setRepositoryDebounced = useDebounced(
-        (repository) => {
+        (repository: string) => {
             setRepository(repository);
         },
         [organization, repository],

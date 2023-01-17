@@ -13,14 +13,14 @@ export const IssuesInput = () => {
     return (
         <Space>
             <InputNumber
-                onChange={(value: number) => {
+                onChange={(value) => {
                     setMinIssues(value);
                 }}
                 value={minIssues}
                 disabled={!isOrganizationValid}
             />
             <InputNumber
-                onChange={(value: number) => setMaxIssues(value)}
+                onChange={(value) => setMaxIssues(value)}
                 value={maxIssues}
                 disabled={!isOrganizationValid}
             />
