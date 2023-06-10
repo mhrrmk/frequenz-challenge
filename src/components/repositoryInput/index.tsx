@@ -26,7 +26,6 @@ export const RepositoryInput: React.FC<InputProps> = (props) => {
     (repository: string) => {
       setRepository(repository);
     },
-    undefined,
     [organization, repository],
   );
 
